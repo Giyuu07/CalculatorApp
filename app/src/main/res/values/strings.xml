@@ -20,4 +20,5 @@
     <string name="clear">C</string>
     <string name="modulo">%</string>
     <string name="divide">/</string>
+    <string name="currentSolution">%1$d</string>
 </resources>
