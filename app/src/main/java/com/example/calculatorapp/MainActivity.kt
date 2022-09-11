@@ -106,11 +106,13 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
             }
             R.id.btnClear -> {
                 tvSolution.text = ""
+                tvResult.text = ""
                 numOfOperator = 0
             }
             R.id.btnDelete -> {
                 if(solution.last().isDigit().not()){
                     numOfOperator = 0
+                    tvResult.text = ""
                 }
                 tvSolution.text = solution.dropLast(1)
             }
@@ -150,9 +152,20 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
                     var s = solution.split("+", "-", "x", "/", "%")
                     num1 = s[0]
                     num2 = s[1]
-                    Toast.makeText(this, "Solution: $num1 $operator $num2 ", Toast.LENGTH_SHORT).show()
+                    val res = getResult(num1.toFloat(), num2.toFloat(), operator)
+                    tvResult.text = "= $res"
                 }
             }
+        }
+    }
+
+    private fun getResult(num1 : Float, num2 : Float, op : String) : Float{
+        return when {
+            op.equals("+") -> num1 + num2
+            op.equals("-") -> num1 - num2
+            op.equals("/") -> num1 / num2
+            op.equals("x") -> num1 * num2
+            else -> num1 % num2
         }
     }
     private fun checkLastString(s : String?) : Boolean{

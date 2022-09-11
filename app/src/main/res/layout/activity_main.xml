@@ -42,20 +42,17 @@
             android:textColor="#F6F5F5"
             android:textSize="34sp" />
 
-        <EditText
-            android:id="@+id/etResult"
+        <TextView
+            android:id="@+id/tvResult"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_margin="20dp"
-            android:ems="10"
-            android:hint="@string/zero"
-            android:inputType="numberDecimal"
+            android:hint="0"
             android:textAlignment="textEnd"
-            android:textColorHint="#F8F7F7"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="50sp"
-            android:textStyle="bold"
-            tools:ignore="DuplicateSpeakableTextCheck"
-            android:autofillHints="" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
