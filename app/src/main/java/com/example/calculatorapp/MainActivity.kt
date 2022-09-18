@@ -110,11 +110,13 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
                 res = 0f
             }
             R.id.btnDelete -> {
-                if(solution.last().isDigit().not()){
-                    numOfOperator = 0
-                    tvResult.text = ""
+                if(solution.isNotEmpty()){
+                    if(solution.last().isDigit().not()){
+                        numOfOperator = 0
+                        tvResult.text = ""
+                    }
+                    tvSolution.text = solution.dropLast(1)
                 }
-                tvSolution.text = solution.dropLast(1)
             }
             R.id.btnModulo -> {
                 addOperator("%")
@@ -132,12 +134,13 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
                 addOperator("+")
             }
             R.id.btnDot -> {
-                if (checkLastString(solution)){
-                    addNumberOrDot(".")
+                if(solution.isNotEmpty()){
+                    if (checkLastString(solution)){
+                        addNumberOrDot(".")
+                    }
                 }
             }
             R.id.btnEqual -> {
-
                 if(solution.isNotEmpty() && checkOperator(solution)){
                     val splitSolution = solution.split("+", "-", "x", "/", "%")
                     num1 = splitSolution[0]
@@ -154,13 +157,15 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     }
 
     private fun addOperator(op : String){
-        val sol = tvSolution.text.toString()
-        if (checkLastString(sol) && numOfOperator < 1){
-            tvSolution.text = getString(R.string.solution, sol, op)
-        }else{
-            val result = tvResult.text.toString().split(" ")
-            num1 = result[1]
-            "$num1$op".also { tvSolution.text = it }
+        if(tvSolution.text.isNotEmpty()){
+            val sol = tvSolution.text.toString()
+            if (checkLastString(sol) && numOfOperator < 1){
+                tvSolution.text = getString(R.string.solution, sol, op)
+            }else{
+                val result = tvResult.text.toString().split(" ")
+                num1 = result[1]
+                "$num1$op".also { tvSolution.text = it }
+            }
         }
     }
 
