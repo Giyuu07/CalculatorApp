@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() , View.OnClickListener{
     private lateinit var tvResult: TextView
@@ -15,6 +13,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     private var numOfOperator = 0
     private var num1 = ""
     private var num2 = ""
+    private var res = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,39 +74,40 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
         val solution = tvSolution.text.toString()
         when(button!!.id){
             R.id.btnNine -> {
-                tvSolution.text = tvSolution.text.toString() + "9"
+                addNumberOrDot("9")
             }
             R.id.btnEight -> {
-                tvSolution.text = tvSolution.text.toString() + "8"
+                addNumberOrDot("8")
             }
             R.id.btnSeven -> {
-                tvSolution.text = tvSolution.text.toString() + "7"
+                addNumberOrDot("7")
             }
             R.id.btnSix -> {
-                tvSolution.text = tvSolution.text.toString() + "6"
+                addNumberOrDot("6")
             }
             R.id.btnFive -> {
-                tvSolution.text = tvSolution.text.toString() + "5"
+                addNumberOrDot("5")
             }
             R.id.btnFour -> {
-                tvSolution.text = tvSolution.text.toString() + "4"
+                addNumberOrDot("4")
             }
             R.id.btnThree -> {
-                tvSolution.text = tvSolution.text.toString() + "3"
+                addNumberOrDot("3")
             }
             R.id.btnTwo -> {
-                tvSolution.text = tvSolution.text.toString() + "2"
+                addNumberOrDot("2")
             }
             R.id.btnOne -> {
-                tvSolution.text = tvSolution.text.toString() + "1"
+                addNumberOrDot("1")
             }
             R.id.btnZero -> {
-                tvSolution.text = tvSolution.text.toString() + "0"
+                addNumberOrDot("0")
             }
             R.id.btnClear -> {
                 tvSolution.text = ""
                 tvResult.text = ""
                 numOfOperator = 0
+                res = 0f
             }
             R.id.btnDelete -> {
                 if(solution.last().isDigit().not()){
@@ -117,54 +117,59 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
                 tvSolution.text = solution.dropLast(1)
             }
             R.id.btnModulo -> {
-                if (checkLastString(solution)){
-                    tvSolution.text = tvSolution.text.toString() + "%"
-                }
+                addOperator("%")
             }
             R.id.btnDivide -> {
-                if (checkLastString(solution) && numOfOperator < 1){
-                    tvSolution.text = tvSolution.text.toString() + "/"
-                }
+                addOperator("/")
             }
             R.id.btnMultiply -> {
-                if (checkLastString(solution) && numOfOperator < 1){
-                    tvSolution.text = tvSolution.text.toString() + "x"
-                }
+                addOperator("x")
             }
             R.id.btnMinus -> {
-                if (checkLastString(solution) && numOfOperator < 1){
-                    tvSolution.text = tvSolution.text.toString() + "-"
-                }
+                addOperator("-")
             }
             R.id.btnPlus -> {
-                if (checkLastString(solution) && numOfOperator < 1){
-                    tvSolution.text = tvSolution.text.toString() + "+"
-                }
+                addOperator("+")
             }
             R.id.btnDot -> {
                 if (checkLastString(solution)){
-                    tvSolution.text = tvSolution.text.toString() + "."
+                    addNumberOrDot(".")
                 }
             }
             R.id.btnEqual -> {
 
-                if(!solution.isNullOrEmpty() && checkOperator(solution)){
-                    var s = solution.split("+", "-", "x", "/", "%")
-                    num1 = s[0]
-                    num2 = s[1]
-                    val res = getResult(num1.toFloat(), num2.toFloat(), operator)
-                    tvResult.text = "= $res"
+                if(solution.isNotEmpty() && checkOperator(solution)){
+                    val splitSolution = solution.split("+", "-", "x", "/", "%")
+                    num1 = splitSolution[0]
+                    num2 = splitSolution[1]
+                    res = getResult(num1.toFloat(), num2.toFloat(), operator)
+                    tvResult.text = getString(R.string.result, res.toString())
                 }
             }
         }
     }
 
+    private fun addNumberOrDot(num : String){
+        tvSolution.text = getString(R.string.solution, tvSolution.text.toString(), num)
+    }
+
+    private fun addOperator(op : String){
+        val sol = tvSolution.text.toString()
+        if (checkLastString(sol) && numOfOperator < 1){
+            tvSolution.text = getString(R.string.solution, sol, op)
+        }else{
+            val result = tvResult.text.toString().split(" ")
+            num1 = result[1]
+            "$num1$op".also { tvSolution.text = it }
+        }
+    }
+
     private fun getResult(num1 : Float, num2 : Float, op : String) : Float{
-        return when {
-            op.equals("+") -> num1 + num2
-            op.equals("-") -> num1 - num2
-            op.equals("/") -> num1 / num2
-            op.equals("x") -> num1 * num2
+        return when (op) {
+            "+" -> num1 + num2
+            "-" -> num1 - num2
+            "/" -> num1 / num2
+            "x" -> num1 * num2
             else -> num1 % num2
         }
     }
